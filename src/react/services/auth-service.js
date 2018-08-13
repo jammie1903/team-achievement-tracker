@@ -17,7 +17,7 @@ class AuthService {
     }
 
     logout() {
-        if(this.currentUser) {
+        if (this.currentUser) {
             return this.currentUser.logout();
         }
         return Promise.reject("User is not logged in");
@@ -31,6 +31,14 @@ class AuthService {
                     return this.login(data.email, data.password);
                 }
             });
+    }
+
+    refresh() {
+        
+    }
+
+    async makeAuthenticatedRequest(url, options) {
+        return fetch(url, Object.assign({}, options, { headers: { Authorization: "Bearer " + (await this.currentUser.jwt()) } }));
     }
 }
 

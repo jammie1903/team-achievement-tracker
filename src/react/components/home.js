@@ -8,7 +8,7 @@ export default class Home extends Component {
     render() {
         if (!AuthService.currentUser) {
             return <Redirect to="/login"/>
-        } else if(AuthService.currentUser.isAdmin) {
+        } else if(true || AuthService.currentUser.isAdmin) {
             return <ViewAcheivementsPage/>
         } else {
             return <SubmitAcheievementPage/>
