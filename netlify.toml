@@ -1,0 +1,3 @@
+[Build]
+  Publish = "build"
+  Functions = "functions"
