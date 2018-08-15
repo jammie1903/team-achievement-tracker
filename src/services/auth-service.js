@@ -1,14 +1,15 @@
 import GoTrue from "gotrue-js";
+import endpoints from "./endpoints";
 
 class AuthService {
     constructor() {
         this.auth = new GoTrue({
-            APIUrl: "https://team-achievement-tracker.netlify.com/.netlify/identity",
+            APIUrl: endpoints.identityApi,
             setCookie: true
         });
         this._userData = null;
         if (this.currentUser) {
-            this.makeAuthenticatedRequest("http://localhost:3001/user")
+            this.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/user`)
                 .then(res => {
                     if (!res.ok) {
                         this.logout().then(() =>
@@ -36,7 +37,7 @@ class AuthService {
 
     login(email, password) {
         return this.auth.login(email, password, true)
-            .then(() => this.makeAuthenticatedRequest("http://localhost:3001/user"))
+            .then(() => this.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/user`))
             .then(res => res.json())
             .then(user => {
                 this._userData = user.data;
@@ -61,7 +62,7 @@ class AuthService {
             .then(response => {
                 if (response.confirmed_at) {
                     return this.auth.login(data.email, data.password, true)
-                        .then(() => this.makeAuthenticatedRequest("http://localhost:3001/user", { method: "post" }))
+                        .then(() => this.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/user`, { method: "post" }))
                         .then(res => res.json())
                         .then(user => {
                             this._userData = user.data;
@@ -72,7 +73,7 @@ class AuthService {
     }
 
     updateUser(fields) {
-        return this.makeAuthenticatedRequest("http://localhost:3001/user", {
+        return this.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/user`, {
             headers: {
                 "Content-Type": "application/json"
             },

@@ -20,6 +20,7 @@ const styles = {
         right: 0,
         top: 0,
         position: 'fixed',
+        zIndex: 1100,
     },
     flex: {
         flexGrow: 1,

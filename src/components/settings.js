@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import AuthService from '../services/auth-service';
 import Form from './form';
 import Section from './section';
+import endpoints from '../services/endpoints';
 
 export default class Settings extends Component {
 
@@ -16,7 +17,7 @@ export default class Settings extends Component {
     }
 
     getTeamLeads() {
-        return AuthService.makeAuthenticatedRequest("http://localhost:3001/users/team-leads")
+        return AuthService.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/users/team-leads`)
             .then((res) => {
                 if (!res.ok) {
                     return res.json().then(json => {throw json});

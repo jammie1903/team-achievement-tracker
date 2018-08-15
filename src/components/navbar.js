@@ -15,7 +15,6 @@ const styles = theme => ({
     left: 0,
     right: 0,
     boxShadow: theme.shadows[8],
-    // borderTop: `1px solid ${theme.palette.primary.main}`
   },
 });
 
