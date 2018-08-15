@@ -16,11 +16,6 @@ import AuthService from "../services/auth-service";
 const styles = {
     root: {
         flexGrow: 1,
-        left: 0,
-        right: 0,
-        top: 0,
-        position: 'fixed',
-        zIndex: 1100,
     },
     flex: {
         flexGrow: 1,
@@ -31,10 +26,33 @@ const styles = {
     },
 };
 
+const offsetLimit = 56;
+
 class Header extends React.Component {
-    state = {
-        anchorEl: null,
-    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            anchorEl: null,
+            offset: 0
+        };
+
+    }
+
+    componentDidMount() {
+        let lastScrollTop = window.scrollY;
+        console.log("scrollOnOpen", lastScrollTop);
+        this.scrollListener = (e) => {
+            const change = window.scrollY - lastScrollTop;
+            lastScrollTop = window.scrollY;
+            this.setState({ offset: Math.max(0, Math.min(offsetLimit, this.state.offset + change)) });
+        }
+        window.addEventListener('scroll', this.scrollListener);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.scrollListener);
+    }
 
     handleMenu = event => {
         this.setState({ anchorEl: event.currentTarget });
@@ -56,7 +74,7 @@ class Header extends React.Component {
 
         return (
             <div className={classes.root}>
-                <AppBar position="static">
+                <AppBar position="fixed" style={{ top: this.state.offset === offsetLimit ? -offsetLimit * 2 : -this.state.offset }}>
                     <Toolbar>
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                             <MenuIcon />
