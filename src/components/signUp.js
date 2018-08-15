@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import AuthService from '../services/auth-service';
 import Form from './form';
 
-export default class Login extends Component {
+export default class SignUp extends Component {
 
     constructor(props) {
         super(props);
@@ -28,6 +28,7 @@ export default class Login extends Component {
                         { name: 'lastName', required: true, label: 'Last Name' },
                         { name: 'email', type: 'email', required: true, label: 'Email Address' },
                         { name: 'password', type: 'password', required: true, label: 'Password', confirm: true },
+                        { name: 'isTeamLead', type: 'boolean', label: 'Are you a team Lead?' },
                     ]} />
             </div>
         )

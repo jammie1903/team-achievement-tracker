@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-import createBrowserHistory from 'history/createBrowserHistory';
+import { history } from './services/history-service';
 import { Router } from 'react-router';
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -25,8 +25,6 @@ const theme = createMuiTheme({
         },
     },
 });
-
-const history = createBrowserHistory()
 
 ReactDOM.render(
     <Router history={history}>

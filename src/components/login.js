@@ -13,7 +13,7 @@ export default class Login extends Component {
     }
 
     login(fields) {
-        return AuthService.login(fields.email, fields.password).then(()=> this.forceUpdate());
+        return AuthService.login(fields.email, fields.password);
     }
 
     render() {
