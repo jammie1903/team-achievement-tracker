@@ -10,18 +10,12 @@ class AuthService {
         this._userData = null;
         if (this.currentUser) {
             this.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/user`)
-                .then(res => {
-                    if (!res.ok) {
-                        this.logout().then(() =>
-                            res.json()
-                                .then(json => { throw json })
-                        );
-                    }
-                    return res.json();
-                })
                 .then(user => {
                     this._userData = user.data;
                     this.onUserDataChanged();
+                }).catch(async err => {
+                    await this.logout();
+                    throw err;
                 });
         }
         this.onUserDataChanged = () => { };
@@ -38,7 +32,6 @@ class AuthService {
     login(email, password) {
         return this.auth.login(email, password, true)
             .then(() => this.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/user`))
-            .then(res => res.json())
             .then(user => {
                 this._userData = user.data;
                 this.onUserDataChanged();
@@ -63,7 +56,6 @@ class AuthService {
                 if (response.confirmed_at) {
                     return this.auth.login(data.email, data.password, true)
                         .then(() => this.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/user`, { method: "post" }))
-                        .then(res => res.json())
                         .then(user => {
                             this._userData = user.data;
                             this.onUserDataChanged();
@@ -79,18 +71,21 @@ class AuthService {
             },
             method: "put",
             body: JSON.stringify(fields),
-        }
-        ).then(res => res.json())
-            .then(user => {
-                this._userData = user.data;
-                this.onUserDataChanged();
-            });
+        }).then(user => {
+            this._userData = user.data;
+            this.onUserDataChanged();
+        });
     }
 
     async makeAuthenticatedRequest(url, options) {
         const parsedOptions = Object.assign({ headers: {} }, options);
         parsedOptions.headers.Authorization = "Bearer " + (await this.currentUser.jwt());
-        return fetch(url, parsedOptions);
+        return fetch(url, parsedOptions).then((res) => {
+            if (!res.ok) {
+                return res.json().then(json => { throw json });
+            }
+            return res.json();
+        });
     }
 }
 

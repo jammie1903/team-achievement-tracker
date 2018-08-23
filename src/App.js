@@ -9,6 +9,7 @@ import './App.css';
 import AuthService from './services/auth-service';
 import Navbar from './components/navbar';
 import FourOhFour from './components/fourOhFour';
+import ActivityFeed from './components/activityFeed';
 
 class App extends Component {
 
@@ -24,6 +25,7 @@ class App extends Component {
         <div className="content" style={{padding: '64px 0 56px 0'}}>
           <Switch>
             <Route exact={true} path="/" component={Home} />
+            <Route path="/activity" component={ActivityFeed} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
             <Route path="/settings" component={Settings} />

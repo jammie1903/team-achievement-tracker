@@ -18,12 +18,6 @@ export default class Settings extends Component {
 
     getTeamLeads() {
         return AuthService.makeAuthenticatedRequest(`${endpoints.achievementTrackerApi}/users/team-leads`)
-            .then((res) => {
-                if (!res.ok) {
-                    return res.json().then(json => {throw json});
-                }
-                return res.json();
-            })
             .then(teamLeads => [{ label: "None", value: null }, ...teamLeads.data.map(lead => ({ label: lead.name, value: lead.id }))]);
     }
 

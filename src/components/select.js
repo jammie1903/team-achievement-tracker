@@ -13,6 +13,10 @@ const styles = theme => ({
     input: {
         display: 'flex',
         padding: 0,
+        '& input': {
+            marginRight: -200,
+            paddingRight: '200px !important',
+        }
     },
     valueContainer: {
         display: 'flex',
@@ -76,7 +80,7 @@ function Control(props) {
                     className: props.selectProps.classes.input,
                     inputRef: props.innerRef,
                     children: props.children,
-                    ...props.innerProps,
+                    ...props.innerProps
                 },
             }}
             {...props.selectProps.textFieldProps}
@@ -144,15 +148,14 @@ const components = {
 };
 
 class IntegrationReactSelect extends React.Component {
-    state = {
-        single: null,
-        multi: null,
-    };
 
     constructor(props) {
         super(props);
         this.state = { options: [], value: this.props.value || null };
-        this.props.options().then(options => this.setState({ options, value: options.find(option => option.value === this.props.value) }));
+        this.props.options().then(options => {
+            this.setState({ options, value: options.find(option => option.value === this.props.value) })
+        });
+        this.myRef = React.createRef();
     }
 
     componentWillReceiveProps(newProps) {
@@ -163,7 +166,12 @@ class IntegrationReactSelect extends React.Component {
         }
     }
 
-    handleChange = item => {
+    componentDidUpdate() {
+        const showError = this.props.required && (this.state.value === null || this.state.value === undefined);
+        this.myRef.current.select.inputRef.required = showError;
+    }
+
+    handleChange = (item) => {
         this.setState({ value: item });
         this.props.onChange && this.props.onChange(item.value);
     };
@@ -177,12 +185,13 @@ class IntegrationReactSelect extends React.Component {
                 color: theme.palette.text.primary,
             }),
         };
-        const styles = { minWidth: 200 };
+        const styles = { width: '100%', maxWidth: 600 };
 
         return (
             <FormControl component="fieldset" margin="normal" style={styles}>
                 <FormLabel component="legend" style={{ textAlign: 'left' }}>{this.props.label}</FormLabel>
                 <Select
+                    ref={this.myRef}
                     classes={classes}
                     styles={selectStyles}
                     options={this.state.options}
@@ -190,6 +199,7 @@ class IntegrationReactSelect extends React.Component {
                     value={this.state.value}
                     onChange={this.handleChange}
                     placeholder="None"
+                    required={this.props.required}
                 />
             </FormControl>
         );

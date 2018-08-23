@@ -27,17 +27,17 @@ class Home extends Component {
             <Grid container className={classes.grid}>
 
                 <Grid item className={classes.item} md={6}>
-                    <AchievementPanel type={{ name: "Accounts", submitText: "got an account!" }}
+                    <AchievementPanel type={{ id:'account', name: "Accounts", actionText: "got an account!" }}
                         stats={{ today: 1, currentWeek: 5, lastWeek: 12 }} />
                 </Grid>
 
                 <Grid item className={classes.item} md={6}>
-                    <AchievementPanel type={{ name: "Good Customer Service", submitText: "served them good!" }}
+                    <AchievementPanel type={{ id: 'customerService', name: "Good Customer Service", actionText: "served them good!" }}
                         stats={{ today: 2, currentWeek: 3, lastWeek: 9 }} />
                 </Grid>
 
                 <Grid item className={classes.item} md={6}>
-                    <AchievementPanel type={{ name: "Teas Made", submitText: "made a Tea!" }}
+                    <AchievementPanel type={{ id: 'tea', name: "Teas Made", actionText: "made a Tea!" }}
                         stats={{ today: 7, currentWeek: 43, lastWeek: 154 }} />
                 </Grid>
 

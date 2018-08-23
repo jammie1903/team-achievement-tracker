@@ -41,7 +41,6 @@ class Header extends React.Component {
 
     componentDidMount() {
         let lastScrollTop = window.scrollY;
-        console.log("scrollOnOpen", lastScrollTop);
         this.scrollListener = (e) => {
             const change = window.scrollY - lastScrollTop;
             lastScrollTop = window.scrollY;

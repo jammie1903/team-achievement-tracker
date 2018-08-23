@@ -13,7 +13,7 @@ export default class Form extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.state = {
             formData: this.props.fields.reduce((acc, field) => {
-                acc[field.name] = field.value ? (field.type === 'boolean' ? String(!!field.value) : field.value) : (field.type === 'boolean' ? 'false' : null);
+                acc[field.name] = field.value !== undefined ? (field.type === 'boolean' ? String(!!field.value) : field.value) : (field.type === 'boolean' ? 'false' : null);
                 return acc;
             }, {}),
             touchedFields: []
@@ -37,7 +37,9 @@ export default class Form extends Component {
         e.preventDefault();
         const output = {};
         this.props.fields.forEach(field => {
-            if (field.type === 'boolean') {
+            if (typeof field.condition === 'function' && !field.condition(this.state.formData)) {
+                output[field.name] = null;
+            } else if (field.type === 'boolean') {
                 output[field.name] = this.state.formData[field.name] === 'true';
             } else {
                 output[field.name] = this.state.formData[field.name];
@@ -49,8 +51,13 @@ export default class Form extends Component {
 
     handleInputChange(event) {
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+        let value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
+
+        const maxLength = this.props.fields.find(field => field.name === name).maxLength;
+        if(maxLength > 0 && maxLength < value.length) {
+            value = value.slice(0, maxLength);
+        }
 
         this.setState({
             formData: Object.assign({}, this.state.formData, { [name]: value }),
@@ -70,17 +77,28 @@ export default class Form extends Component {
             key={field.name}
             options={field.options}
             value={this.state.formData[field.name]}
+            required={field.required}
             onChange={(value) => this.handleSelectInputChange(field.name, value)}
         />, <br key={field.name + "__br"} />];
     }
 
     getTextField(field) {
+        const type = field.type === 'longText' ? 'text' : (field.type || 'text');
+
+        let remainingText = '';
+        if(field.type === 'longText' && field.maxLength > 0) {
+            const currentValue = this.state.formData[field.name];
+            remainingText = ` (${field.maxLength - (currentValue ? currentValue.length : 0)} characters remaining)`;
+        }
+
         return [<TextField
-            style={{ minWidth: 200 }}
+            style={{ width: '100%', maxWidth: 600 }}
             key={field.name}
-            type={field.type || 'text'}
+            type={type}
+            multiline={field.type === 'longText'}
+            rowsMax={8}
             margin="normal"
-            helperText={field.helperText || field.label}
+            helperText={(field.helperText || field.label) + remainingText}
             label={field.label}
             name={field.name}
             required={field.required}
@@ -135,8 +153,10 @@ export default class Form extends Component {
                     {this.props.title}
                 </Typography>
                 <form onSubmit={this.onSubmit}>
-                    {this.props.fields.map((field, index) => this.renderField(field, index))}
-                    <Button type="submit" style={{ margin: 15 }} variant="contained" color="primary">
+                    {this.props.fields
+                        .filter(field => typeof field.condition !== 'function' || field.condition(this.state.formData))
+                        .map((field, index) => this.renderField(field, index))}
+                    <Button type="submit" style={{ marginTop: 15 }} variant="contained" color="primary">
                         {this.props.submitText || this.props.title}
                     </Button>
                 </form>
