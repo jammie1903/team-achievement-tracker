@@ -26,6 +26,9 @@ class Home extends Component {
     }
 
     async componentDidMount() {
+        if (!AuthService.currentUser) {
+            return;
+        }
         var oneDay = 1000 * 60 * 60 * 24;
         const todayStart = oneDay * Math.floor(Date.now() / oneDay);
         const currentWeekStart = todayStart - (oneDay * new Date().getDay());
