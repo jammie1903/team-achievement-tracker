@@ -1,19 +1,19 @@
-export default {
-    account: {
+class Types {
+    account = {
         id: 'account',
         name: "Accounts",
         actionText: "got an account!"
-    },
+    };
 
-    customerService: {
+    customerService = {
         id: 'customerService',
         name: "Good Customer Service",
         actionText: "served them good!"
-    },
+    };
 
-    tea: {
-        id: 'tea',
-        name: "Teas Made",
-        actionText: "made a Tea!"
+    get all() {
+        return Object.keys(this).map(k => this[k]);
     }
 }
+
+export default new Types();

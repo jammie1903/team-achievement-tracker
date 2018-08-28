@@ -7,24 +7,9 @@ import registerServiceWorker from './registerServiceWorker';
 import { history } from './services/history-service';
 import { Router } from 'react-router';
 
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import theme from './services/theme'
+import { MuiThemeProvider } from '@material-ui/core';
 
-const theme = createMuiTheme({
-    palette: {
-        primary: {
-            light: '#7c43bd',
-            main: '#4a148c',
-            dark: '#12005e',
-            contrastText: '#fff',
-        },
-        secondary: {
-            light: '#cfff95',
-            main: '#9ccc65',
-            dark: '#6b9b37',
-            contrastText: '#000000',
-        },
-    },
-});
 
 ReactDOM.render(
     <Router history={history}>

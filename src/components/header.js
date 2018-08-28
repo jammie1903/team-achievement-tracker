@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -19,6 +18,9 @@ const styles = {
     },
     flex: {
         flexGrow: 1,
+    },
+    marginLeft: {
+        marginLeft: 48,
     },
     menuButton: {
         marginLeft: -12,
@@ -75,10 +77,8 @@ class Header extends React.Component {
             <div className={classes.root}>
                 <AppBar position="fixed" style={{ top: this.state.offset === offsetLimit ? -offsetLimit * 2 : -this.state.offset }}>
                     <Toolbar>
-                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="title" color="inherit" className={classes.flex}>
+
+                        <Typography variant="title" color="inherit" className={classes.flex + (AuthService.currentUser ? ` ${classes.marginLeft}` : '')}>
                             Team Acheivement Tracker
                         </Typography>
                         {AuthService.currentUser && (

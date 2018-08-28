@@ -7,9 +7,11 @@ import Activity from './activity';
 import TeamCache from '../services/team-cache';
 import achievementTypes from '../services/achievement-types';
 
-const styles = {
-
-}
+const styles = theme => ({
+    root: {
+        padding: `0 ${theme.spacing.unit * 2}px`
+    }
+})
 
 class ActivityFeed extends Component {
 
@@ -50,7 +52,7 @@ class ActivityFeed extends Component {
         }
 
         return (
-            <div>
+            <div className={this.props.classes.root}>
                 {this.state.activities.map(activity => (
                     <Activity key={activity.id} activity={activity} />
                 ))}

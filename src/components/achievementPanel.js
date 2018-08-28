@@ -91,12 +91,22 @@ class AchievementPanel extends Component {
         })
 
         console.log(data);
-        
+
+        this.props.stats.today.count++;
+        this.props.stats.currentWeek.count++;
+
         this.setState({ snackbarOpen: true, modalOpen: false });
     }
 
+    getCount(type) {
+        if(!this.props.stats || !this.props.stats[type]) {
+            return '...'
+        }
+        return this.props.stats[type].count;
+    }
+
     render() {
-        const { classes, type, stats } = this.props;
+        let { classes, type, stats } = this.props;
         return (
             <Section>
                 <Typography variant="display1">{type.name}</Typography>
@@ -104,21 +114,21 @@ class AchievementPanel extends Component {
                     <Grid item xs={6}>
                         <Paper className={classes.paper}>
                             <Typography variant="subheading" className={classes.wrap}>{type.name} last week</Typography>
-                            <Typography variant="title" color="primary">{stats.lastWeek}</Typography>
+                            <Typography variant="title" color="primary">{this.getCount('lastWeek')}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.paper}>
                             <Typography variant="subheading" className={classes.wrap}>{type.name} this week</Typography>
-                            <Typography variant="title" color="primary">{stats.currentWeek}</Typography>
+                            <Typography variant="title" color="primary">{this.getCount('currentWeek')}</Typography>
                         </Paper>
                     </Grid>
 
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
                             <Typography variant="title" className={classes.wrap}>{type.name} Today</Typography>
-                            <Typography variant="display1" color="primary">{stats.today}</Typography>
-                            <Button color="primary" style={{ marginTop: 8 }} variant="contained" onClick={this.openAchievementModal}>
+                            <Typography variant="display1" color="primary">{this.getCount('today')}</Typography>
+                            <Button color="primary" disabled={!stats} style={{ marginTop: 8 }} variant="contained" onClick={this.openAchievementModal}>
                                 I {type.actionText}
                             </Button>
                         </Paper>
@@ -144,7 +154,7 @@ class AchievementPanel extends Component {
                         </div>
                     </div>
                 </Modal>
-                <Snackbar message="Achievement Saved Successfully" open={this.state.snackbarOpen} onClose={this.onSnackbarClose}/>
+                <Snackbar message="Achievement Saved Successfully" open={this.state.snackbarOpen} onClose={this.onSnackbarClose} />
             </Section>
         )
     }
